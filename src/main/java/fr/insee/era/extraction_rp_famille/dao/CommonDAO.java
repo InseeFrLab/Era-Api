@@ -264,7 +264,7 @@ public abstract class CommonDAO {
 
     protected List<ResponseNetUserDto> getRimByGenderCityAndPeriod(GenderType gender, LocalDate startDate,
                                                                    LocalDate endDate, JdbcTemplate jdbc) {
-        String sql = "select r.id, r.identifiant, r.idinternaute, mail, CONCAT(codedepartement, codecommune) as " +
+        String sql = "select r.id, r.identifiant, r.idinternaute, regexp_replace(mail, '[\\s+]', '', 'g') as mail, CONCAT(codedepartement, codecommune) as " +
                 "depcom , irisar," +
                 "numvoiloc, bisterloc, typevoiloc, nomvoiloc, resloc, cpostloc, car " +
                 "from reponseinternetmenages r, city_parameter_tmp tmp, internautes i " +
