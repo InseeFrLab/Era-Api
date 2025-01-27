@@ -253,13 +253,17 @@ public abstract class CommonDAO {
         jdbc.execute("DROP TABLE IF EXISTS city_parameter_tmp");
         jdbc.execute("CREATE TEMPORARY TABLE IF NOT EXISTS city_parameter_tmp (city_code " +
                 "varchar(255) NOT NULL,  iris varchar(255), gender varchar(1) NOT NULL)");
-
+        jdbc.execute("CREATE INDEX city_parameter_tmp_idx_city ON city_parameter_tmp (city_code)");
+        jdbc.execute("CREATE INDEX city_parameter_tmp_idx_iris ON city_parameter_tmp (iris)");
+        jdbc.execute("CREATE INDEX city_parameter_tmp_idx_gender ON city_parameter_tmp (gender)");
         jdbc.batchUpdate("INSERT INTO city_parameter_tmp (city_code, iris, gender) VALUES(?, ?, ?)"
                 , citiesParameter, 100, (PreparedStatement ps, CityParameterDto cityParameter) -> {
                     ps.setString(1, cityParameter.getCityCode());
                     ps.setString(2, cityParameter.getIris());
                     ps.setString(3, cityParameter.getGender().getValue());
                 });
+
+        log.info("FIN");
     }
 
     protected List<ResponseNetUserDto> getRimByGenderCityAndPeriod(GenderType gender, LocalDate startDate,
